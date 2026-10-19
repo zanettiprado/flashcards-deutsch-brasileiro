@@ -488,3 +488,21 @@ kbd {
   text-decoration: underline;
   cursor: pointer;
 }
+
+/* ------------------------------------------------------- troca de curso */
+
+.troca-curso {
+  display: inline-block;
+  margin-top: 14px;
+  padding: 10px 14px;
+  background: var(--papel);
+  border: 2px solid var(--borda);
+  border-radius: 999px;
+  box-shadow: var(--sombra);
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--destaque);
+  text-decoration: none;
+}
+
+.troca-curso:hover { border-color: var(--destaque); }

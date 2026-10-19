@@ -29,7 +29,10 @@ RAIZ = os.path.dirname(AQUI)
 sys.path.insert(0, AQUI)
 
 import regras                                    # noqa: E402
+import regras_pt                                 # noqa: E402
 from lexico import LEXICO                        # noqa: E402
+from lexico_pt import LEXICO_PT                  # noqa: E402
+from notas_pt import NOTAS_PT                    # noqa: E402
 
 NIVEIS = ["A1", "A2", "B1", "B2", "C1"]
 
@@ -44,6 +47,19 @@ ATONAS = {
     "bin", "bist", "sind", "war", "hat", "habe", "hast", "haben",
     "nicht", "noch", "nur", "so", "da", "dass", "ob", "zum", "schon",
     "mein", "meine", "dein", "deine", "sein", "seine", "ihre", "mal",
+}
+
+
+# Palavras portuguesas atonas, que ficam em minusculas na pronuncia da frase.
+ATONAS_PT = {
+    "a", "o", "as", "os", "um", "uma", "uns", "umas",
+    "de", "da", "do", "das", "dos", "d", "em", "na", "no", "nas", "nos",
+    "ao", "aos", "\u00e0", "\u00e0s", "pelo", "pela", "pelos", "pelas",
+    "e", "ou", "que", "se", "com", "por", "para", "pra", "n\u00e3o",
+    "me", "te", "lhe", "nos", "vos", "lhes", "o", "a",
+    "meu", "minha", "seu", "sua", "teu", "tua", "este", "esta", "esse",
+    "essa", "isso", "\u00e9", "foi", "era", "s\u00e3o", "est\u00e1",
+    "eu", "voc\u00ea", "ele", "ela", "n\u00f3s", "eles", "elas",
 }
 
 
@@ -69,14 +85,32 @@ def montar_palavras(frase_de, faltando):
     return palavras
 
 
-def pronuncia_frase(palavras):
+def pronuncia_frase(palavras, atonas=None, campo="de"):
+    atonas = ATONAS if atonas is None else atonas
     saida = []
     for p in palavras:
         pron = p["pronuncia"]
-        if p["de"].lower() in ATONAS and "-" not in pron:
+        if p[campo].lower() in atonas and "-" not in pron:
             pron = pron.lower()
         saida.append(pron)
     return " ".join(saida)
+
+
+def montar_palavras_pt(frase_pt, faltando):
+    """Mesma ideia de montar_palavras, mas para o lado portugues."""
+    palavras = []
+    for tok in tokenizar(frase_pt):
+        de = LEXICO_PT.get(tok) or LEXICO_PT.get(tok.lower())
+        if not de:
+            faltando[tok.lower()] += 1
+            de = "?"
+        palavras.append(OrderedDict([
+            ("pt", tok),
+            ("de", de),
+            ("silabas", regras_pt.silabas_str(tok)),
+            ("pronuncia", regras_pt.pronunciar(tok)),
+        ]))
+    return palavras
 
 
 def carregar_frases():
@@ -93,6 +127,7 @@ def carregar_frases():
 def main():
     frases = carregar_frases()
     faltando = Counter()
+    faltando_pt = Counter()
     cards = []
     vistos_de, vistos_pt = {}, {}
     erros = []
@@ -110,6 +145,7 @@ def main():
         vistos_pt[chave_pt] = i
 
         palavras = montar_palavras(de, faltando)
+        palavras_pt = montar_palavras_pt(pt, faltando_pt)
         card = OrderedDict([
             ("id", i),
             ("nivel", nivel),
@@ -118,14 +154,25 @@ def main():
             ("de", de),
             ("palavras", palavras),
             ("pronuncia", pronuncia_frase(palavras)),
+            ("palavrasPt", palavras_pt),
+            ("pronunciaPt", pronuncia_frase(palavras_pt, ATONAS_PT, "pt")),
         ])
         if gramatica:
             card["gramatica"] = gramatica
+        if NOTAS_PT.get(i):
+            card["gramatikPt"] = NOTAS_PT[i]
         cards.append(card)
 
     if faltando:
         print("Faltam %d palavras no lexico. Cole em lexico.py:\n" % len(faltando))
         for palavra, n in sorted(faltando.items()):
+            print('    %-22s "",   # %dx' % ('"%s":' % palavra, n))
+        return 1
+
+    if faltando_pt:
+        print("Faltam %d palavras no lexico PT. Cole em lexico_pt.py:\n"
+              % len(faltando_pt))
+        for palavra, n in sorted(faltando_pt.items()):
             print('    %-22s "",   # %dx' % ('"%s":' % palavra, n))
         return 1
 
@@ -144,6 +191,13 @@ def main():
                 if not p.get(campo) or p[campo] == "?":
                     erros.append("card %s: palavra %r sem %s"
                                  % (c["id"], p["de"], campo))
+        if not c["palavrasPt"]:
+            erros.append("card %s sem palavrasPt" % c["id"])
+        for p in c["palavrasPt"]:
+            for campo in ("de", "pt", "silabas", "pronuncia"):
+                if not p.get(campo) or p[campo] == "?":
+                    erros.append("card %s: palavra PT %r sem %s"
+                                 % (c["id"], p["pt"], campo))
         if c["nivel"] not in NIVEIS:
             erros.append("card %s com nivel invalido" % c["id"])
 

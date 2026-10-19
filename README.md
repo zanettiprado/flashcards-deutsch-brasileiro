@@ -1,6 +1,14 @@
 # Alemão do zero — flashcards de frases do cotidiano
 
-**▶ Estude agora: <https://zanettiprado.github.io/flashcards-deutsch-brasileiro/>**
+O site tem **dois cursos**, com os mesmos 738 cards vistos dos dois lados:
+
+| Para quem | Página | O que vê |
+| --- | --- | --- |
+| Fala **português**, aprende **alemão** | [**Alemão do zero**](https://zanettiprado.github.io/flashcards-deutsch-brasileiro/) | Interface em português, áudio em alemão, pronúncia escrita para brasileiro |
+| Fala **alemão**, aprende **português** | [**Portugiesisch von null**](https://zanettiprado.github.io/flashcards-deutsch-brasileiro/portugiesisch.html) | Interface em alemão, áudio em português, pronúncia escrita para alemão |
+
+Cada página tem um link para a outra no topo. O progresso é guardado separado
+por curso, então as duas pessoas podem usar o mesmo navegador sem se atrapalhar.
 
 Abre direto no navegador do computador ou do celular, sem instalar nada.
 
@@ -133,17 +141,26 @@ O botão **Zerar todo o progresso**, na tela inicial, apaga tudo de uma vez.
 ## Arquivos
 
 ```
-index.html          estrutura das duas telas (início e estudo)
+index.html          curso de ALEMÃO (interface em português)
+portugiesisch.html  curso de PORTUGUÊS (interface em alemão)
 css/style.css       estilos: claro, texto grande, mobile-first
-js/app.js           lógica: sessão, virada, áudio, progresso, atalhos
-data/cards.js       os 738 cards (define a constante global CARDS)
+js/app.js           lógica dos dois cursos (window.CURSO decide qual)
+data/cards.js       os 738 cards, com os dois lados (constante global CARDS)
 README.md           este arquivo
 tools/              scripts que geram data/cards.js (opcional, precisa de Python 3)
-  regras.py         silabação alemã e pronúncia aproximada em PT-BR
-  lexico.py         1.478 palavras alemãs e suas traduções
+  regras.py         silabação alemã e pronúncia escrita para brasileiro
+  regras_pt.py      silabação portuguesa e pronúncia escrita para alemão
+  lexico.py         1.478 palavras alemãs traduzidas para o português
+  lexico_pt.py      1.490 palavras portuguesas traduzidas para o alemão
+  notas_pt.py       181 notas de gramática portuguesa, escritas em alemão
   frases_a1.py …    as frases de cada nível
   gerar_cards.py    monta e valida data/cards.js
 ```
+
+As duas páginas usam o mesmo `index.html` como molde: a estrutura é idêntica e
+os textos da interface são preenchidos por `js/app.js` a partir da tabela
+`TEXTOS`, conforme o valor de `window.CURSO` (`'de'` ou `'pt'`). Para mudar uma
+palavra da interface, mexa nessa tabela, não no HTML.
 
 ## Formato de um card
 
@@ -183,6 +200,36 @@ A transcrição é pensada para quem lê português do Brasil, não é AFI:
 | `-er` final átono | `a` | `Vater` → `FÁ-ta` |
 | `-ig` final | `irr` | `wenig` → `VÊ-nirr` |
 | `h` inicial | `h` aspirado, como no inglês *house* | `Haus` → `HAUS` |
+
+### Convenções da pronúncia do português (para leitor alemão)
+
+No curso `portugiesisch.html` a lautschrift é escrita para olhos alemães,
+não em AFI:
+
+| Português | Fica | Exemplo |
+| --- | --- | --- |
+| `ch`, `x` (som de xis) | `sch` | `chuva` → `SCHU-wa` |
+| `j`, `g` antes de e/i | `zh` (como o *J* em *Journal*) | `hoje` → `O-zhi` |
+| `nh` · `lh` | `nj` · `lj` | `minha` → `MI-nja` |
+| `v` | `w` | `livro` → `LI-wru` |
+| `ç`, `ss`, `c` antes de e/i | `ss` | `coração` → `ko-ra-SSAUNG` |
+| `s` entre vogais | `s` (que em alemão já soa [z]) | `casa` → `KA-sa` |
+| `ão` · `ãe` · `õe` | `aung` · `aing` · `oing` | `não` → `NAUNG` |
+| `-m`, `-n` no fim da sílaba | `ng` (vogal nasal) | `bom` → `BONG` |
+| `-em` no fim da palavra | `eing` | `bem` → `BEING` |
+| `ei` · `oi` | `ej` · `oj` (não como o *ei* alemão) | `leite` → `LEJ-tschi` |
+| `eu` · `iu` | `ehu` · `ihu` (não como o *eu* alemão) | `eu` → `EHU` |
+| `-o` átono no fim · `-e` átono no fim | `u` · `i` | `obrigado` → `o-bri-GA-du` |
+| `t`, `d` antes de [i] | `tsch`, `dsch` | `dia` → `DSCHI-a` |
+| `l` no fim da sílaba | `u` | `Brasil` → `bra-SIU` |
+| `é` · `ê` | `ä` · `e` | `café` → `ka-FÄ` |
+| `r` inicial e `rr` | `rr` (forte, como o *r* alemão) | `carro` → `KA-rru` |
+| `r` entre vogais | `r` (batidinha curta) | `caro` → `KA-ru` |
+
+Duas escolhas merecem explicação. O `zh` não existe no alemão escrito, mas era
+a única forma de não confundir o som do `j` português com o `sch` de `chuva` —
+são sons diferentes e a confusão seria pior. E `ehu` para o `eu` português
+porque, lido como ditongo alemão, `eu` sairia "oi", que é outro som.
 
 ---
 
@@ -236,8 +283,13 @@ Assim a silabação, a pronúncia e as validações saem prontas e consistentes.
 
    Preencha a tradução (`"tee": "chá",`) e rode de novo.
 
-4. Com o léxico completo, o script escreve `data/cards.js` e imprime o resumo
-   por nível e por categoria.
+4. O script faz o mesmo pelo **lado português**: se faltar alguma palavra em
+   `tools/lexico_pt.py` (português → alemão), ele lista as pendências do mesmo
+   jeito. Para acrescentar uma nota de gramática portuguesa, use o id do card
+   em `tools/notas_pt.py`.
+
+5. Com os dois léxicos completos, o script escreve `data/cards.js` e imprime o
+   resumo por nível e por categoria.
 
 O gerador também recusa o arquivo se houver **ids repetidos, frases repetidas
 (em português ou em alemão), campos vazios ou nível inválido** — ou seja, ele é

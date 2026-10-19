@@ -1,0 +1,136 @@
+<!doctype html>
+<html lang="de-DE">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Portugiesisch von null</title>
+<meta name="description" content="Portugiesisch von null lernen: 738 Karteikarten mit Alltagssätzen von A1 bis C1, mit einer Lautschrift für deutsche Leser und Ton.">
+<link rel="stylesheet" href="css/style.css?v=3">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🗣️</text></svg>">
+<!-- O ?v= serve para furar o cache do GitHub Pages (max-age=600): sem ele,
+     quem já abriu o site continua com a versão antiga por até 10 minutos.
+     Ao mudar css/js/cards, suba o número aqui também. -->
+</head>
+<body>
+
+<!-- Os textos desta página são preenchidos por js/app.js conforme o curso,
+     para que index.html e portugiesisch.html compartilhem a mesma estrutura. -->
+
+<!-- ------------------------------------------------------------- TELA INICIAL -->
+<main id="tela-inicio" class="tela">
+  <header class="cabecalho">
+    <h1 id="txt-titulo">Portugiesisch von null</h1>
+    <p class="subtitulo" id="txt-subtitulo"></p>
+    <a class="troca-curso" id="link-outro-curso" href="index.html"></a>
+  </header>
+
+  <section class="bloco">
+    <h2 id="txt-passo1"></h2>
+    <div id="lista-niveis" class="niveis"></div>
+  </section>
+
+  <section class="bloco">
+    <h2 id="txt-passo2"></h2>
+    <div class="direcoes" id="lista-direcoes" role="group"></div>
+  </section>
+
+  <section class="bloco">
+    <h2 id="txt-passo3"></h2>
+    <p class="explica-voz" id="txt-explica-voz"></p>
+    <div class="escolha-voz">
+      <label class="rotulo-voz" id="rotulo-voz" for="seletor-voz"></label>
+      <select id="seletor-voz"></select>
+      <button type="button" class="btn btn-pequeno" id="btn-testar-voz"></button>
+    </div>
+    <p id="diagnostico-voz" class="diagnostico-voz"></p>
+  </section>
+
+  <p id="aviso-voz" class="aviso" hidden></p>
+
+  <section class="bloco rodape-inicio">
+    <button type="button" id="btn-comecar" class="btn btn-grande"></button>
+    <button type="button" id="btn-zerar-tudo" class="btn btn-texto"></button>
+  </section>
+</main>
+
+<!-- ---------------------------------------------------------------- ESTUDO -->
+<main id="tela-estudo" class="tela" hidden>
+  <header class="barra-topo">
+    <button type="button" id="btn-voltar" class="btn btn-icone">←</button>
+    <div class="info-sessao">
+      <span id="rotulo-sessao"></span>
+      <span id="contador" class="contador"></span>
+    </div>
+    <button type="button" id="btn-embaralhar" class="btn btn-icone">⇄</button>
+  </header>
+
+  <div class="progresso" role="progressbar"
+       aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" id="progresso">
+    <div id="progresso-barra" class="progresso-barra"></div>
+  </div>
+  <p id="progresso-texto" class="progresso-texto"></p>
+
+  <div id="card" class="card" tabindex="0" role="button">
+    <div class="card-inner" id="card-inner">
+
+      <div class="card-face card-frente">
+        <p class="etiqueta" id="etiqueta-frente"></p>
+        <p class="frase" id="frase-frente"></p>
+        <p class="dica" id="txt-dica"></p>
+      </div>
+
+      <div class="card-face card-verso">
+        <p class="etiqueta" id="etiqueta-verso"></p>
+        <p class="frase frase-verso" id="frase-verso"></p>
+        <p class="pronuncia" id="pronuncia-frase"></p>
+        <div class="palavras" id="palavras"></div>
+        <p class="gramatica" id="gramatica" hidden></p>
+      </div>
+
+    </div>
+  </div>
+
+  <div id="painel-palavra" class="painel-palavra" hidden>
+    <button type="button" class="fechar-painel" id="fechar-painel">×</button>
+    <p class="palavra-de" id="painel-de"></p>
+    <p class="palavra-pt" id="painel-pt"></p>
+    <dl class="palavra-detalhes">
+      <dt id="txt-silabas"></dt><dd id="painel-silabas"></dd>
+      <dt id="txt-pronuncia"></dt><dd id="painel-pronuncia"></dd>
+    </dl>
+    <button type="button" class="btn btn-pequeno" id="painel-ouvir"></button>
+  </div>
+
+  <div class="audios">
+    <button type="button" class="btn btn-audio" id="btn-ouvir"></button>
+    <button type="button" class="btn btn-audio" id="btn-ouvir-devagar"></button>
+    <button type="button" class="btn btn-audio" id="btn-ouvir-palavras"></button>
+    <a class="btn btn-audio btn-link" id="link-tradutor" href="#"
+       target="_blank" rel="noopener"></a>
+  </div>
+
+  <p class="voz-em-uso">
+    <span id="txt-voz-em-uso"></span>
+    <strong id="voz-atual">—</strong>
+    <button type="button" class="btn-texto-pequeno" id="btn-trocar-voz"></button>
+  </p>
+
+  <div class="avaliacao">
+    <button type="button" class="btn btn-nao-sei" id="btn-nao-sei"></button>
+    <button type="button" class="btn btn-sei" id="btn-sei"></button>
+  </div>
+
+  <div class="navegacao">
+    <button type="button" class="btn" id="btn-anterior"></button>
+    <button type="button" class="btn" id="btn-reiniciar"></button>
+    <button type="button" class="btn" id="btn-proximo"></button>
+  </div>
+
+  <p class="atalhos" id="txt-atalhos"></p>
+</main>
+
+<script>window.CURSO = 'pt';</script>
+<script src="data/cards.js?v=3"></script>
+<script src="js/app.js?v=3"></script>
+</body>
+</html>
