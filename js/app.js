@@ -127,22 +127,131 @@
 
   // --------------------------------------------------------------------- voz
 
-  var voz = { de: null, pt: null, avisado: false };
+  var voz = { de: null, pt: null, escolhaManual: null };
+
+  var CHAVE_VOZ = VERSAO_ARMAZENAMENTO + ':voz-de';
+
+  /* Vozes "de brincadeira" do macOS: aparecem na lista como alemãs, mas são
+     efeitos (robô, vovô, sussurro) e algumas caem na voz inglesa do sistema. */
+  var VOZES_NOVIDADE = [
+    'eddy', 'flo', 'grandma', 'grandpa', 'reed', 'rocko', 'sandy', 'shelley',
+    'bubbles', 'bells', 'boing', 'jester', 'organ', 'superstar', 'trinoids',
+    'whisper', 'wobble', 'bahh', 'bad news', 'good news', 'albert', 'cellos',
+    'zarvox', 'novelty', 'eloquence'
+  ];
+
+  /* Vozes alemãs de fala normal mais comuns em macOS, Windows e Android. */
+  var VOZES_BOAS = [
+    'google deutsch', 'anna', 'petra', 'markus', 'yannick', 'helena',
+    'viktor', 'katja', 'hedda', 'stefan', 'conrad', 'amala', 'killian',
+    'german germany'
+  ];
+
+  function ehNovidade(nome) {
+    var n = (nome || '').toLowerCase();
+    for (var i = 0; i < VOZES_NOVIDADE.length; i++) {
+      if (n.indexOf(VOZES_NOVIDADE[i]) === 0 || n.indexOf('(' + VOZES_NOVIDADE[i]) >= 0) {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  function vozesDoIdioma(prefixo) {
+    if (!('speechSynthesis' in window)) { return []; }
+    var todas = window.speechSynthesis.getVoices() || [];
+    return todas.filter(function (v) {
+      return (v.lang || '').toLowerCase().replace('_', '-').indexOf(prefixo) === 0;
+    });
+  }
+
+  function pontuarVoz(v) {
+    var nome = (v.name || '').toLowerCase();
+    for (var i = 0; i < VOZES_BOAS.length; i++) {
+      if (nome.indexOf(VOZES_BOAS[i]) >= 0) { return 100 - i; }
+    }
+    return ehNovidade(v.name) ? -10 : 10;
+  }
+
+  function lerVozSalva() {
+    try { return localStorage.getItem(CHAVE_VOZ) || ''; } catch (e) { return ''; }
+  }
+
+  function gravarVozSalva(uri) {
+    try { localStorage.setItem(CHAVE_VOZ, uri || ''); } catch (e) {}
+  }
 
   function escolherVozes() {
     if (!('speechSynthesis' in window)) { return; }
-    var vozes = window.speechSynthesis.getVoices() || [];
+    var alemas = vozesDoIdioma('de');
+    var salva = lerVozSalva();
+
     voz.de = null;
-    voz.pt = null;
-    for (var i = 0; i < vozes.length; i++) {
-      var lang = (vozes[i].lang || '').toLowerCase().replace('_', '-');
-      if (!voz.de && lang.indexOf('de') === 0) { voz.de = vozes[i]; }
-      if (!voz.pt && lang.indexOf('pt') === 0) { voz.pt = vozes[i]; }
+    if (salva) {
+      for (var i = 0; i < alemas.length; i++) {
+        if (alemas[i].voiceURI === salva || alemas[i].name === salva) {
+          voz.de = alemas[i];
+          break;
+        }
+      }
     }
-    mostrarAvisoVoz(vozes.length > 0);
+    if (!voz.de && alemas.length) {
+      voz.de = alemas.slice().sort(function (a, b) {
+        return pontuarVoz(b) - pontuarVoz(a);
+      })[0];
+    }
+
+    var portuguesas = vozesDoIdioma('pt');
+    voz.pt = portuguesas.length ? portuguesas[0] : null;
+
+    preencherSeletorVoz(alemas);
+    mostrarAvisoVoz(
+      (window.speechSynthesis.getVoices() || []).length > 0, alemas.length);
+    mostrarVozAtual();
   }
 
-  function mostrarAvisoVoz(vozesCarregadas) {
+  function preencherSeletorVoz(alemas) {
+    var sel = $('seletor-voz');
+    if (!sel) { return; }
+    var atual = voz.de ? voz.de.voiceURI : '';
+    if (sel.dataset.qtd === String(alemas.length) && sel.value === atual) { return; }
+    sel.innerHTML = '';
+    if (!alemas.length) {
+      var vazio = document.createElement('option');
+      vazio.textContent = 'nenhuma voz alemã encontrada';
+      sel.appendChild(vazio);
+      sel.disabled = true;
+      return;
+    }
+    sel.disabled = false;
+    alemas.slice().sort(function (a, b) { return pontuarVoz(b) - pontuarVoz(a); })
+      .forEach(function (v) {
+        var op = document.createElement('option');
+        op.value = v.voiceURI;
+        op.textContent = v.name + ' (' + v.lang + ')' +
+          (ehNovidade(v.name) ? ' — voz de efeito, evite' : '');
+        sel.appendChild(op);
+      });
+    sel.value = atual;
+    sel.dataset.qtd = String(alemas.length);
+  }
+
+  function mostrarVozAtual() {
+    var alvo = $('voz-atual');
+    if (alvo) { alvo.textContent = voz.de ? voz.de.name : 'nenhuma voz alemã'; }
+    var diag = $('diagnostico-voz');
+    if (!diag) { return; }
+    if (!('speechSynthesis' in window)) {
+      diag.textContent = 'Este navegador não lê em voz alta.';
+    } else if (!voz.de) {
+      diag.textContent = 'Nenhuma voz alemã disponível neste aparelho.';
+    } else {
+      diag.textContent = 'Em uso: ' + voz.de.name + ' (' + voz.de.lang + '), ' +
+        (voz.de.localService ? 'instalada no aparelho' : 'vinda da internet') + '.';
+    }
+  }
+
+  function mostrarAvisoVoz(vozesCarregadas, quantasAlemas) {
     var alvo = $('aviso-voz');
     if (!alvo) { return; }
     if (!('speechSynthesis' in window)) {
@@ -151,7 +260,7 @@
       alvo.hidden = false;
       return;
     }
-    if (vozesCarregadas && !voz.de) {
+    if (vozesCarregadas && (!voz.de || quantasAlemas === 0)) {
       alvo.innerHTML = '<strong>Nenhuma voz alemã instalada.</strong>' +
         ' O áudio em alemão vai sair com sotaque errado ou não funcionar.' +
         ' No macOS: Ajustes do Sistema → Acessibilidade → Conteúdo Falado →' +
@@ -168,10 +277,15 @@
 
   function falar(texto, idioma, velocidade) {
     if (!('speechSynthesis' in window)) { return; }
+    // Resolve a voz na hora: em alguns navegadores a lista só fica pronta
+    // depois do carregamento, e sem isso o sistema cai na voz inglesa.
+    if ((idioma === 'pt' && !voz.pt) || (idioma !== 'pt' && !voz.de)) {
+      escolherVozes();
+    }
     window.speechSynthesis.cancel();
     var fala = new SpeechSynthesisUtterance(texto);
-    fala.lang = idioma === 'pt' ? 'pt-BR' : 'de-DE';
     var escolhida = idioma === 'pt' ? voz.pt : voz.de;
+    fala.lang = escolhida ? escolhida.lang : (idioma === 'pt' ? 'pt-BR' : 'de-DE');
     if (escolhida) { fala.voice = escolhida; }
     fala.rate = velocidade || 1;
     window.speechSynthesis.speak(fala);
@@ -180,9 +294,10 @@
   function falarPalavras(palavras) {
     if (!('speechSynthesis' in window)) { return; }
     window.speechSynthesis.cancel();
+    if (!voz.de) { escolherVozes(); }
     palavras.forEach(function (p) {
       var fala = new SpeechSynthesisUtterance(p.de);
-      fala.lang = 'de-DE';
+      fala.lang = voz.de ? voz.de.lang : 'de-DE';
       if (voz.de) { fala.voice = voz.de; }
       fala.rate = 0.75;
       window.speechSynthesis.speak(fala);
@@ -472,6 +587,23 @@
 
   function ligarEventos() {
     window.addEventListener('resize', ajustarAlturaCard);
+
+    var seletor = $('seletor-voz');
+    if (seletor) {
+      seletor.addEventListener('change', function () {
+        gravarVozSalva(this.value);
+        escolherVozes();
+        falar('Guten Abend', 'de', 0.9);
+      });
+    }
+    var testar = $('btn-testar-voz');
+    if (testar) {
+      testar.addEventListener('click', function () {
+        falar('Guten Abend', 'de', 0.9);
+      });
+    }
+    var trocar = $('btn-trocar-voz');
+    if (trocar) { trocar.addEventListener('click', voltarAoInicio); }
     $('btn-comecar').addEventListener('click', iniciarSessao);
     $('btn-zerar-tudo').addEventListener('click', zerarTudo);
     $('btn-voltar').addEventListener('click', voltarAoInicio);

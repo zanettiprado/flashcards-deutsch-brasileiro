@@ -87,9 +87,24 @@ de só no fim da rodada. O tamanho da rodada não muda.
 
 ### Áudio
 
-O som usa a **Web Speech API** do navegador (`speechSynthesis`), com
-`de-DE` para o alemão e `pt-BR` para o português. Não há download nem
-dependência externa.
+O som usa a **Web Speech API** do navegador (`speechSynthesis`). A voz vem do
+**seu próprio aparelho** (ou, no caso da "Google Deutsch", dos servidores do
+Google através do Chrome) — o site apenas pede ao sistema que leia o texto.
+Por isso o mesmo card pode soar diferente em cada computador.
+
+Na tela inicial, o bloco **3. Voz do alemão** mostra qual voz está em uso e
+deixa você trocar e testar com um clique. A escolha fica salva.
+
+O site prefere automaticamente, nesta ordem: `Google Deutsch` (a de melhor
+qualidade, a mesma família usada pelo Google Tradutor), depois vozes alemãs
+normais do sistema (Anna, Petra, Markus, Hedda…), e por último qualquer outra.
+As vozes "de efeito" do macOS (Eddy, Flo, Grandma, Grandpa, Reed, Rocko, Sandy,
+Shelley) são marcadas como *evite* na lista: são vozes de brincadeira e algumas
+acabam lendo o alemão com pronúncia inglesa.
+
+> **Se o alemão sair com sotaque de inglês** — por exemplo `Abend` soando
+> "ÊI-bend" em vez de "Á-bent" — não é sotaque regional: é o sistema lendo
+> alemão com uma voz inglesa. Troque a voz no bloco 3 da tela inicial.
 
 Se o navegador não tiver uma voz alemã instalada, a tela inicial mostra um aviso
 com as instruções de instalação:

@@ -37,6 +37,20 @@
     </div>
   </section>
 
+  <section class="bloco">
+    <h2>3. Voz do alemão</h2>
+    <p class="explica-voz">A voz vem do seu próprio aparelho, não do site. Se o
+      alemão sair com sotaque de inglês, é porque o sistema caiu numa voz
+      inglesa — troque aqui e teste.</p>
+    <div class="escolha-voz">
+      <label class="rotulo-voz" for="seletor-voz">Voz usada no alemão</label>
+      <select id="seletor-voz"></select>
+      <button type="button" class="btn btn-pequeno" id="btn-testar-voz">
+        🔊 Testar: “Guten Abend”</button>
+    </div>
+    <p id="diagnostico-voz" class="diagnostico-voz"></p>
+  </section>
+
   <p id="aviso-voz" class="aviso" hidden></p>
 
   <section class="bloco rodape-inicio">
@@ -101,6 +115,11 @@
     <a class="btn btn-audio btn-link" id="link-tradutor" href="#" target="_blank" rel="noopener">
       ↗ Ouvir no Google Tradutor</a>
   </div>
+
+  <p class="voz-em-uso">
+    Voz do alemão: <strong id="voz-atual">—</strong>
+    <button type="button" class="btn-texto-pequeno" id="btn-trocar-voz">trocar</button>
+  </p>
 
   <div class="avaliacao">
     <button type="button" class="btn btn-nao-sei" id="btn-nao-sei">

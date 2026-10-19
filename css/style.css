@@ -425,3 +425,66 @@ kbd {
 @media (prefers-reduced-motion: reduce) {
   .card-inner, .progresso-barra { transition: none; }
 }
+
+/* --------------------------------------------------------- escolha da voz */
+
+.explica-voz {
+  margin: 0 0 12px;
+  font-size: 16px;
+  color: var(--tinta-fraca);
+}
+
+.escolha-voz {
+  display: grid;
+  gap: 10px;
+  padding: 14px 16px;
+  background: var(--papel);
+  border: 2px solid var(--borda);
+  border-radius: var(--raio);
+  box-shadow: var(--sombra);
+}
+
+.rotulo-voz {
+  font-size: 14px;
+  text-transform: uppercase;
+  letter-spacing: .06em;
+  color: var(--tinta-fraca);
+}
+
+#seletor-voz {
+  width: 100%;
+  padding: 12px;
+  background: var(--fundo);
+  border: 2px solid var(--borda);
+  border-radius: 12px;
+  font: inherit;
+  font-size: 17px;
+  color: inherit;
+}
+
+#seletor-voz:disabled { opacity: .6; }
+
+.diagnostico-voz {
+  margin: 10px 2px 0;
+  font-size: 15px;
+  color: var(--tinta-fraca);
+}
+
+.voz-em-uso {
+  margin: 0 0 12px;
+  font-size: 15px;
+  color: var(--tinta-fraca);
+  text-align: center;
+}
+
+.btn-texto-pequeno {
+  margin-left: 6px;
+  padding: 2px 4px;
+  background: none;
+  border: none;
+  font: inherit;
+  font-size: 15px;
+  color: var(--destaque);
+  text-decoration: underline;
+  cursor: pointer;
+}
