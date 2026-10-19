@@ -506,3 +506,16 @@ kbd {
 }
 
 .troca-curso:hover { border-color: var(--destaque); }
+
+/* ---------------------------------------------------------- saudação */
+
+.saudacao {
+  margin: 0 0 6px;
+  font-size: 20px;
+  font-weight: 600;
+  color: var(--destaque);
+}
+
+@media (min-width: 560px) {
+  .saudacao { font-size: 22px; }
+}
