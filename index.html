@@ -1,0 +1,127 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Alemão do Zero — Flashcards</title>
+<meta name="description" content="Curso de alemão do zero com flashcards de frases do cotidiano, do A1 ao C1, com pronúncia aproximada em português.">
+<link rel="stylesheet" href="css/style.css">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🇩🇪</text></svg>">
+</head>
+<body>
+
+<!-- ------------------------------------------------------------- TELA INICIAL -->
+<main id="tela-inicio" class="tela">
+  <header class="cabecalho">
+    <h1>Alemão do zero</h1>
+    <p class="subtitulo">Frases do cotidiano em flashcards, do A1 ao C1,
+      com pronúncia aproximada em português.</p>
+  </header>
+
+  <section class="bloco">
+    <h2>1. Escolha o nível</h2>
+    <div id="lista-niveis" class="niveis"></div>
+  </section>
+
+  <section class="bloco">
+    <h2>2. Escolha a direção</h2>
+    <div class="direcoes" role="radiogroup" aria-label="Direção do estudo">
+      <button type="button" class="direcao" data-direcao="pt-de" aria-pressed="true">
+        <strong>Português → Alemão</strong>
+        <small>Você vê a frase em português e tenta dizer em alemão</small>
+      </button>
+      <button type="button" class="direcao" data-direcao="de-pt" aria-pressed="false">
+        <strong>Alemão → Português</strong>
+        <small>Você vê a frase em alemão e tenta entender</small>
+      </button>
+    </div>
+  </section>
+
+  <p id="aviso-voz" class="aviso" hidden></p>
+
+  <section class="bloco rodape-inicio">
+    <button type="button" id="btn-comecar" class="btn btn-grande">Começar a estudar</button>
+    <button type="button" id="btn-zerar-tudo" class="btn btn-texto">Zerar todo o progresso</button>
+  </section>
+</main>
+
+<!-- ---------------------------------------------------------------- ESTUDO -->
+<main id="tela-estudo" class="tela" hidden>
+  <header class="barra-topo">
+    <button type="button" id="btn-voltar" class="btn btn-icone" aria-label="Voltar ao início">←</button>
+    <div class="info-sessao">
+      <span id="rotulo-sessao"></span>
+      <span id="contador" class="contador"></span>
+    </div>
+    <button type="button" id="btn-embaralhar" class="btn btn-icone" aria-label="Embaralhar cards" title="Embaralhar">⇄</button>
+  </header>
+
+  <div class="progresso" role="progressbar" aria-label="Progresso do nível"
+       aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" id="progresso">
+    <div id="progresso-barra" class="progresso-barra"></div>
+  </div>
+  <p id="progresso-texto" class="progresso-texto"></p>
+
+  <div id="card" class="card" tabindex="0" role="button"
+       aria-label="Card. Toque ou aperte espaço para virar.">
+    <div class="card-inner" id="card-inner">
+
+      <div class="card-face card-frente">
+        <p class="etiqueta" id="etiqueta-frente"></p>
+        <p class="frase" id="frase-frente"></p>
+        <p class="dica">toque no card ou aperte <kbd>espaço</kbd> para virar</p>
+      </div>
+
+      <div class="card-face card-verso">
+        <p class="etiqueta" id="etiqueta-verso"></p>
+        <p class="frase frase-verso" id="frase-verso"></p>
+        <p class="pronuncia" id="pronuncia-frase"></p>
+        <div class="palavras" id="palavras" aria-label="Palavras da frase"></div>
+        <p class="gramatica" id="gramatica" hidden></p>
+      </div>
+
+    </div>
+  </div>
+
+  <div id="painel-palavra" class="painel-palavra" hidden>
+    <button type="button" class="fechar-painel" id="fechar-painel" aria-label="Fechar">×</button>
+    <p class="palavra-de" id="painel-de"></p>
+    <p class="palavra-pt" id="painel-pt"></p>
+    <dl class="palavra-detalhes">
+      <dt>Sílabas</dt><dd id="painel-silabas"></dd>
+      <dt>Pronúncia</dt><dd id="painel-pronuncia"></dd>
+    </dl>
+    <button type="button" class="btn btn-pequeno" id="painel-ouvir">🔊 Ouvir a palavra</button>
+  </div>
+
+  <div class="audios">
+    <button type="button" class="btn btn-audio" id="btn-ouvir">🔊 Ouvir a frase</button>
+    <button type="button" class="btn btn-audio" id="btn-ouvir-devagar">🐢 Ouvir devagar</button>
+    <button type="button" class="btn btn-audio" id="btn-ouvir-palavras">🔉 Palavra por palavra</button>
+    <a class="btn btn-audio btn-link" id="link-tradutor" href="#" target="_blank" rel="noopener">
+      ↗ Ouvir no Google Tradutor</a>
+  </div>
+
+  <div class="avaliacao">
+    <button type="button" class="btn btn-nao-sei" id="btn-nao-sei">
+      Não sei <kbd>2</kbd></button>
+    <button type="button" class="btn btn-sei" id="btn-sei">
+      Eu sei <kbd>1</kbd></button>
+  </div>
+
+  <div class="navegacao">
+    <button type="button" class="btn" id="btn-anterior">← Anterior</button>
+    <button type="button" class="btn" id="btn-reiniciar">Reiniciar nível</button>
+    <button type="button" class="btn" id="btn-proximo">Próximo →</button>
+  </div>
+
+  <p class="atalhos">
+    Atalhos: <kbd>espaço</kbd> virar · <kbd>←</kbd> <kbd>→</kbd> navegar ·
+    <kbd>1</kbd> sei · <kbd>2</kbd> não sei
+  </p>
+</main>
+
+<script src="data/cards.js"></script>
+<script src="js/app.js"></script>
+</body>
+</html>

@@ -1,0 +1,9 @@
+# Sistema
+.DS_Store
+
+# Capturas de tela soltas na pasta (não fazem parte do site)
+Screenshot*.png
+
+# Caches do Python gerados ao rodar tools/gerar_cards.py
+__pycache__/
+*.pyc
