@@ -1,11 +1,13 @@
-# Alemão do zero — flashcards de frases do cotidiano
+# Tandem — flashcards de alemão e português
+
+*Tandem* é como se chama, nas duas línguas, duas pessoas que ensinam a própria língua uma à outra. O site é isso: os mesmos 738 cards vistos dos dois lados.
 
 O site tem **dois cursos**, com os mesmos 738 cards vistos dos dois lados:
 
 | Para quem | Página | O que vê |
 | --- | --- | --- |
-| Fala **português**, aprende **alemão** | [**Alemão do zero**](https://zanettiprado.github.io/flashcards-deutsch-brasileiro/) | Interface em português, áudio em alemão, pronúncia escrita para brasileiro |
-| Fala **alemão**, aprende **português** | [**Portugiesisch von null**](https://zanettiprado.github.io/flashcards-deutsch-brasileiro/portugiesisch.html) | Interface em alemão, áudio em português, pronúncia escrita para alemão |
+| Fala **português**, aprende **alemão** | [**Tandem · Alemão**](https://zanettiprado.github.io/flashcards-deutsch-brasileiro/) | Interface em português, áudio em alemão, pronúncia escrita para brasileiro |
+| Fala **alemão**, aprende **português** | [**Tandem · Português**](https://zanettiprado.github.io/flashcards-deutsch-brasileiro/portugiesisch.html) | Interface em alemão, áudio em português, pronúncia escrita para alemão |
 
 Cada página tem um link para a outra no topo. O progresso é guardado separado
 por curso, então as duas pessoas podem usar o mesmo navegador sem se atrapalhar.

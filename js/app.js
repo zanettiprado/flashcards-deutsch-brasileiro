@@ -25,7 +25,8 @@
       lang: 'pt-BR',
       idiomaAlvo: 'de',          // língua que o aluno está aprendendo
       idiomaBase: 'pt',          // língua que o aluno já fala
-      titulo: 'Alemão do zero',
+      nome: 'Tandem',
+      titulo: 'Tandem · Alemão',
       saudacao: 'Vamos lá, Felipe, aprender alemão!',
       subtitulo: 'Frases do cotidiano em flashcards, do A1 ao C1, com ' +
         'pronúncia aproximada em português.',
@@ -115,7 +116,8 @@
       lang: 'de-DE',
       idiomaAlvo: 'pt',
       idiomaBase: 'de',
-      titulo: 'Portugiesisch von null',
+      nome: 'Tandem',
+      titulo: 'Tandem · Português',
       saudacao: 'Hallo Giulia, lernen wir Portugiesisch? \u2764\ufe0f',
       subtitulo: 'Alltagssätze als Karteikarten, von A1 bis C1, mit einer ' +
         'Lautschrift, die sich für deutsche Augen lesen lässt.',
@@ -526,7 +528,7 @@
     document.documentElement.lang = T.lang;
     document.title = T.titulo;
     var mapa = {
-      'txt-titulo': T.titulo, 'txt-saudacao': T.saudacao,
+      'txt-titulo': T.nome, 'txt-saudacao': T.saudacao,
       'txt-subtitulo': T.subtitulo,
       'txt-passo1': T.passo1, 'txt-passo2': T.passo2, 'txt-passo3': T.passo3,
       'txt-explica-voz': T.explicaVoz, 'rotulo-voz': T.rotuloVoz,
