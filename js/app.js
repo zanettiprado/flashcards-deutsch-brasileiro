@@ -26,7 +26,7 @@
       idiomaAlvo: 'de',          // língua que o aluno está aprendendo
       idiomaBase: 'pt',          // língua que o aluno já fala
       titulo: 'Alemão do zero',
-      saudacao: 'Vamos lá, Felipe, aprender alemão! \u2764\ufe0f',
+      saudacao: 'Vamos lá, Felipe, aprender alemão!',
       subtitulo: 'Frases do cotidiano em flashcards, do A1 ao C1, com ' +
         'pronúncia aproximada em português.',
       passo1: '1. Escolha o nível',
