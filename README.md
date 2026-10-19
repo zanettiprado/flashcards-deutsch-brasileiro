@@ -294,6 +294,28 @@ Links: [Wortliste A1](https://www.goethe.de/pro/relaunch/prf/sw/Goethe-Zertifika
 [Deutsch Online B2 — sumário](https://lernen.goethe.de/deutschonline/B2/PDF/DT_online_B2_Inhalt_1-12_de.pdf) ·
 [DW Deutsch lernen](https://learngerman.dw.com/)
 
+## Publicar as alterações
+
+O site está no GitHub Pages, servido a partir da branch `main`. Para atualizar:
+
+```bash
+cd ~/Desktop/"curso de alemao"
+git add -A
+git commit -m "descrição do que mudou"
+git push
+```
+
+O Pages republica sozinho em cerca de um minuto.
+
+> **Mudou `css/style.css`, `js/app.js` ou `data/cards.js`?** Suba também o
+> número do `?v=` nas tags do `index.html` (`app.js?v=2` → `?v=3`). O GitHub
+> Pages envia tudo com `cache-control: max-age=600`, então sem isso quem já
+> abriu o site continua carregando os arquivos antigos.
+>
+> O próprio `index.html` também fica até 10 minutos em cache. Para ver a
+> mudança na hora, recarregue com <kbd>Cmd</kbd>+<kbd>Shift</kbd>+<kbd>R</kbd>
+> (ou <kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>R</kbd> no Windows).
+
 ## Compatibilidade
 
 Funciona em Chrome, Edge, Firefox e Safari atuais, em computador e celular.
