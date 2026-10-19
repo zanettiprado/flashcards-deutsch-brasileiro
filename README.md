@@ -1,5 +1,9 @@
 # Alemão do zero — flashcards de frases do cotidiano
 
+**▶ Estude agora: <https://zanettiprado.github.io/flashcards-deutsch-brasileiro/>**
+
+Abre direto no navegador do computador ou do celular, sem instalar nada.
+
 Site estático para aprender alemão do zero, com **738 flashcards** de frases
 reais distribuídas em cinco níveis (A1 a C1). Cada card traz a frase nos dois
 idiomas, a pronúncia aproximada em português, a tradução palavra por palavra
